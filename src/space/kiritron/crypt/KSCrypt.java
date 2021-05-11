@@ -29,6 +29,79 @@ import java.util.stream.Collectors;
  */
 
 public class KSCrypt {
+    // Таблица с кодами символов //
+    static String Char_SPACE = "/0000000";
+
+    static String Char_A = "/0000001";
+    static String Char_B = "/0000002";
+    static String Char_C = "/0000004";
+    static String Char_D = "/0000006";
+    static String Char_E = "/0000008";
+    static String Char_F = "/0000010";
+    static String Char_G = "/0000012";
+    static String Char_H = "/0000014";
+    static String Char_I = "/0000016";
+    static String Char_J = "/0000018";
+    static String Char_K = "/0000020";
+    static String Char_L = "/0000022";
+    static String Char_M = "/0000024";
+    static String Char_N = "/0000026";
+    static String Char_O = "/0000028";
+    static String Char_P = "/0000030";
+    static String Char_Q = "/0000032";
+    static String Char_R = "/0000034";
+    static String Char_S = "/0000036";
+    static String Char_T = "/0000038";
+    static String Char_U = "/0000040";
+    static String Char_V = "/0000042";
+    static String Char_W = "/0000044";
+    static String Char_X = "/0000046";
+    static String Char_Y = "/0000048";
+    static String Char_Z = "/0000050";
+
+    static String Char_a = "/0000003";
+    static String Char_b = "/0000005";
+    static String Char_c = "/0000007";
+    static String Char_d = "/0000009";
+    static String Char_e = "/0000011";
+    static String Char_f = "/0000013";
+    static String Char_g = "/0000015";
+    static String Char_h = "/0000017";
+    static String Char_i = "/0000019";
+    static String Char_j = "/0000021";
+    static String Char_k = "/0000023";
+    static String Char_l = "/0000025";
+    static String Char_m = "/0000027";
+    static String Char_n = "/0000029";
+    static String Char_o = "/0000031";
+    static String Char_p = "/0000033";
+    static String Char_q = "/0000035";
+    static String Char_r = "/0000037";
+    static String Char_s = "/0000039";
+    static String Char_t = "/0000041";
+    static String Char_u = "/0000043";
+    static String Char_v = "/0000045";
+    static String Char_w = "/0000047";
+    static String Char_x = "/0000049";
+    static String Char_y = "/0000051";
+    static String Char_z = "/0000053";
+
+    static String Char_0 = "/0000052";
+    static String Char_1 = "/0000054";
+    static String Char_2 = "/0000055";
+    static String Char_3 = "/0000056";
+    static String Char_4 = "/0000057";
+    static String Char_5 = "/0000058";
+    static String Char_6 = "/0000059";
+    static String Char_7 = "/0000060";
+    static String Char_8 = "/0000061";
+    static String Char_9 = "/0000062";
+
+    static String Char_PLUS = "/0000063";
+    static String Char_SOLIDUS = "/0000064";
+
+    // Сам код //
+
     /**
      * Шифрование String по стандартам КС Крипт.
      * @param DataToCrypt Данные в String, которые нужно зашифровать.
@@ -41,7 +114,7 @@ public class KSCrypt {
         }
 
         DataToCrypt = EncodeBase64(DataToCrypt); // Кодировать в Base64
-        DataToCrypt = encodeSymbols(DataToCrypt + "!0!0!09912912921257128510!0!0!"); // Кодировать согласно таблице КС Крипт
+        DataToCrypt = encodeSymbols(DataToCrypt + "+0+0+09912912921257128510+0+0+"); // Кодировать согласно таблице КС Крипт
 
         String HashKey;
         HashKey = getHashKey(Key);
@@ -64,7 +137,6 @@ public class KSCrypt {
 
         DataToCrypt = genEncryptedString(DataToCrypt, Index);
         DataToCrypt = EncodeBase64(DataToCrypt);
-
         return DataToCrypt;
     }
 
@@ -98,8 +170,8 @@ public class KSCrypt {
 
         DataToDecrypt = genDecryptedString(DataToDecrypt, Index);
         DataToDecrypt = decodeSymbols(DataToDecrypt);
-        if (DataToDecrypt.contains("!0!0!09912912921257128510!0!0!")) {
-            DataToDecrypt = DataToDecrypt.replace("!0!0!09912912921257128510!0!0!", "");
+        if (DataToDecrypt.contains("+0+0+09912912921257128510+0+0+")) {
+            DataToDecrypt = DataToDecrypt.replace("+0+0+09912912921257128510+0+0+", "");
         } else {
             throw new IOException("Дешифрование не удалось. Неправильный ключ.");
         }
@@ -175,8 +247,8 @@ public class KSCrypt {
     private static String GetSecretCodeFromHashKey(String HashKey) throws IOException {
         long longOfHashKey;
 
-        if (HashKey.length() > 19) {
-            HashKey = HashKey.substring(0, 19);
+        if (HashKey.length() > 18) {
+            HashKey = HashKey.substring(0, 18);
         }
 
         if (HashKey.matches("[-+]?\\d+")) { // На всякий случай...
@@ -211,91 +283,75 @@ public class KSCrypt {
     private static String encodeSymbols(String Message) {
         String Data = Message;
 
-        Data = Data.replaceAll(" ","/%%%");
+        Data = Data.replaceAll(" ", Char_SPACE);
 
-        Data = Data.replaceAll("A","/0000000");
-        Data = Data.replaceAll("B","/0000002");
-        Data = Data.replaceAll("C","/0000004");
-        Data = Data.replaceAll("D","/0000006");
-        Data = Data.replaceAll("E","/0000008");
-        Data = Data.replaceAll("F","/0000010");
-        Data = Data.replaceAll("G","/0000012");
-        Data = Data.replaceAll("H","/0000014");
-        Data = Data.replaceAll("I","/0000016");
-        Data = Data.replaceAll("J","/0000018");
-        Data = Data.replaceAll("K","/0000020");
-        Data = Data.replaceAll("L","/0000022");
-        Data = Data.replaceAll("M","/0000024");
-        Data = Data.replaceAll("N","/0000026");
-        Data = Data.replaceAll("O","/0000028");
-        Data = Data.replaceAll("P","/0000030");
-        Data = Data.replaceAll("Q","/0000032");
-        Data = Data.replaceAll("R","/0000034");
-        Data = Data.replaceAll("S","/0000036");
-        Data = Data.replaceAll("T","/0000038");
-        Data = Data.replaceAll("U","/0000040");
-        Data = Data.replaceAll("V","/0000042");
-        Data = Data.replaceAll("W","/0000044");
-        Data = Data.replaceAll("X","/0000046");
-        Data = Data.replaceAll("Y","/0000048");
-        Data = Data.replaceAll("Z","/0000050");
+        Data = Data.replaceAll("A", Char_A);
+        Data = Data.replaceAll("B", Char_B);
+        Data = Data.replaceAll("C", Char_C);
+        Data = Data.replaceAll("D", Char_D);
+        Data = Data.replaceAll("E", Char_E);
+        Data = Data.replaceAll("F", Char_F);
+        Data = Data.replaceAll("G", Char_G);
+        Data = Data.replaceAll("H", Char_H);
+        Data = Data.replaceAll("I", Char_I);
+        Data = Data.replaceAll("J", Char_J);
+        Data = Data.replaceAll("K", Char_K);
+        Data = Data.replaceAll("L", Char_L);
+        Data = Data.replaceAll("M", Char_M);
+        Data = Data.replaceAll("N", Char_N);
+        Data = Data.replaceAll("O", Char_O);
+        Data = Data.replaceAll("P", Char_P);
+        Data = Data.replaceAll("Q", Char_Q);
+        Data = Data.replaceAll("R", Char_R);
+        Data = Data.replaceAll("S", Char_S);
+        Data = Data.replaceAll("T", Char_T);
+        Data = Data.replaceAll("U", Char_U);
+        Data = Data.replaceAll("V", Char_V);
+        Data = Data.replaceAll("W", Char_W);
+        Data = Data.replaceAll("X", Char_X);
+        Data = Data.replaceAll("Y", Char_Y);
+        Data = Data.replaceAll("Z", Char_Z);
 
-        Data = Data.replaceAll("a","/0000052");
-        Data = Data.replaceAll("b","/0000054");
-        Data = Data.replaceAll("c","/0000056");
-        Data = Data.replaceAll("d","/0000058");
-        Data = Data.replaceAll("e","/0000060");
-        Data = Data.replaceAll("f","/0000062");
-        Data = Data.replaceAll("g","/0000064");
-        Data = Data.replaceAll("h","/0000066");
-        Data = Data.replaceAll("i","/0000068");
-        Data = Data.replaceAll("j","/0000070");
-        Data = Data.replaceAll("k","/0000072");
-        Data = Data.replaceAll("l","/0000074");
-        Data = Data.replaceAll("m","/0000076");
-        Data = Data.replaceAll("n","/0000078");
-        Data = Data.replaceAll("o","/0000080");
-        Data = Data.replaceAll("p","/0000082");
-        Data = Data.replaceAll("q","/0000084");
-        Data = Data.replaceAll("r","/0000086");
-        Data = Data.replaceAll("s","/0000088");
-        Data = Data.replaceAll("t","/0000090");
-        Data = Data.replaceAll("u","/0000092");
-        Data = Data.replaceAll("v","/0000094");
-        Data = Data.replaceAll("w","/0000096");
-        Data = Data.replaceAll("x","/0000098");
-        Data = Data.replaceAll("y","/0000100");
-        Data = Data.replaceAll("z","/0000102");
+        Data = Data.replaceAll("a", Char_a);
+        Data = Data.replaceAll("b", Char_b);
+        Data = Data.replaceAll("c", Char_c);
+        Data = Data.replaceAll("d", Char_d);
+        Data = Data.replaceAll("e", Char_e);
+        Data = Data.replaceAll("f", Char_f);
+        Data = Data.replaceAll("g", Char_g);
+        Data = Data.replaceAll("h", Char_h);
+        Data = Data.replaceAll("i", Char_i);
+        Data = Data.replaceAll("j", Char_j);
+        Data = Data.replaceAll("k", Char_k);
+        Data = Data.replaceAll("l", Char_l);
+        Data = Data.replaceAll("m", Char_m);
+        Data = Data.replaceAll("n", Char_n);
+        Data = Data.replaceAll("o", Char_o);
+        Data = Data.replaceAll("p", Char_p);
+        Data = Data.replaceAll("q", Char_q);
+        Data = Data.replaceAll("r", Char_r);
+        Data = Data.replaceAll("s", Char_s);
+        Data = Data.replaceAll("t", Char_t);
+        Data = Data.replaceAll("u", Char_u);
+        Data = Data.replaceAll("v", Char_v);
+        Data = Data.replaceAll("w", Char_w);
+        Data = Data.replaceAll("x", Char_x);
+        Data = Data.replaceAll("y", Char_y);
+        Data = Data.replaceAll("z", Char_z);
 
-        Data = Data.replaceAll("!","/0000132");
-        Data = Data.replaceAll("\\?","/0000133");
-        Data = Data.replaceAll("<","/0000134");
-        Data = Data.replaceAll(">","/0000135");
-        Data = Data.replaceAll("\\.","/0000136");
-        Data = Data.replaceAll(",","/0000137");
-        Data = Data.replaceAll("`","/0000138");
-        Data = Data.replaceAll("~","/0000139");
-        Data = Data.replaceAll("\\^","/0000140");
-        Data = Data.replaceAll(":","/0000141");
-        Data = Data.replaceAll("\\$","/0000142");
-        Data = Data.replaceAll(";","/0000143");
-        Data = Data.replaceAll("№","/0000144");
-        Data = Data.replaceAll("#","/0000145");
-        Data = Data.replaceAll("@","/0000146");
-        Data = Data.replaceAll("'","/0000147");
-        Data = Data.replaceAll("\\(","/0000148");
-        Data = Data.replaceAll("\\)","/0000149");
-        Data = Data.replaceAll("\\*","/0000150");
-        Data = Data.replaceAll("\\|","/0000151");
-        Data = Data.replaceAll("&","/0000152");
-        Data = Data.replaceAll("=","/0000153");
-        Data = Data.replaceAll("\\+","/0000154");
-        Data = Data.replaceAll("-","/0000155");
-        Data = Data.replaceAll("_","/0000156");
-        Data = Data.replaceAll("\\{","/0000157");
-        Data = Data.replaceAll("}","/0000158");
-        Data = Data.replaceAll("\\[","/0000159");
-        Data = Data.replaceAll("]","/0000160");
+        Data = Data.replaceAll("0", Char_0);
+        Data = Data.replaceAll("1", Char_1);
+        Data = Data.replaceAll("2", Char_2);
+        Data = Data.replaceAll("3", Char_3);
+        Data = Data.replaceAll("4", Char_4);
+        Data = Data.replaceAll("5", Char_5);
+        Data = Data.replaceAll("6", Char_6);
+        Data = Data.replaceAll("7", Char_7);
+        Data = Data.replaceAll("8", Char_8);
+        Data = Data.replaceAll("9", Char_9);
+
+        Data = Data.replaceAll("\\+", Char_PLUS);
+        Data = Data.replaceAll("/", Char_SOLIDUS);
 
         return Data;
     }
@@ -303,91 +359,75 @@ public class KSCrypt {
     private static String decodeSymbols(String Message) {
         String Data = Message;
 
-        Data = Data.replaceAll("/0000102","z");
-        Data = Data.replaceAll("/0000100","y");
-        Data = Data.replaceAll("/0000098","x");
-        Data = Data.replaceAll("/0000096","w");
-        Data = Data.replaceAll("/0000094","v");
-        Data = Data.replaceAll("/0000092","u");
-        Data = Data.replaceAll("/0000090","t");
-        Data = Data.replaceAll("/0000088","s");
-        Data = Data.replaceAll("/0000086","r");
-        Data = Data.replaceAll("/0000084","q");
-        Data = Data.replaceAll("/0000082","p");
-        Data = Data.replaceAll("/0000080","o");
-        Data = Data.replaceAll("/0000078","n");
-        Data = Data.replaceAll("/0000076","m");
-        Data = Data.replaceAll("/0000074","l");
-        Data = Data.replaceAll("/0000072","k");
-        Data = Data.replaceAll("/0000070","j");
-        Data = Data.replaceAll("/0000068","i");
-        Data = Data.replaceAll("/0000066","h");
-        Data = Data.replaceAll("/0000064","g");
-        Data = Data.replaceAll("/0000062","f");
-        Data = Data.replaceAll("/0000060","e");
-        Data = Data.replaceAll("/0000058","d");
-        Data = Data.replaceAll("/0000056","c");
-        Data = Data.replaceAll("/0000054","b");
-        Data = Data.replaceAll("/0000052","a");
+        Data = Data.replaceAll(Char_SOLIDUS, "/");
+        Data = Data.replaceAll(Char_PLUS, "+");
 
-        Data = Data.replaceAll("/0000050","Z");
-        Data = Data.replaceAll("/0000048","Y");
-        Data = Data.replaceAll("/0000046","X");
-        Data = Data.replaceAll("/0000044","W");
-        Data = Data.replaceAll("/0000042","V");
-        Data = Data.replaceAll("/0000040","U");
-        Data = Data.replaceAll("/0000038","T");
-        Data = Data.replaceAll("/0000036","S");
-        Data = Data.replaceAll("/0000034","R");
-        Data = Data.replaceAll("/0000032","Q");
-        Data = Data.replaceAll("/0000030","P");
-        Data = Data.replaceAll("/0000028","O");
-        Data = Data.replaceAll("/0000026","N");
-        Data = Data.replaceAll("/0000024","M");
-        Data = Data.replaceAll("/0000022","L");
-        Data = Data.replaceAll("/0000020","K");
-        Data = Data.replaceAll("/0000018","J");
-        Data = Data.replaceAll("/0000016","I");
-        Data = Data.replaceAll("/0000014","H");
-        Data = Data.replaceAll("/0000012","G");
-        Data = Data.replaceAll("/0000010","F");
-        Data = Data.replaceAll("/0000008","E");
-        Data = Data.replaceAll("/0000006","D");
-        Data = Data.replaceAll("/0000004","C");
-        Data = Data.replaceAll("/0000002","B");
-        Data = Data.replaceAll("/0000000","A");
+        Data = Data.replaceAll(Char_9, "9");
+        Data = Data.replaceAll(Char_8, "8");
+        Data = Data.replaceAll(Char_7, "7");
+        Data = Data.replaceAll(Char_6, "6");
+        Data = Data.replaceAll(Char_5, "5");
+        Data = Data.replaceAll(Char_4, "4");
+        Data = Data.replaceAll(Char_3, "3");
+        Data = Data.replaceAll(Char_2, "2");
+        Data = Data.replaceAll(Char_1, "1");
+        Data = Data.replaceAll(Char_0, "0");
 
-        Data = Data.replaceAll("/0000132","!");
-        Data = Data.replaceAll("/0000133","\\?");
-        Data = Data.replaceAll("/0000134","<");
-        Data = Data.replaceAll("/0000135",">");
-        Data = Data.replaceAll("/0000136","\\.");
-        Data = Data.replaceAll("/0000137",",");
-        Data = Data.replaceAll("/0000138","`");
-        Data = Data.replaceAll("/0000139","~");
-        Data = Data.replaceAll("/0000140","\\^");
-        Data = Data.replaceAll("/0000141",":");
-        Data = Data.replaceAll("/0000142","\\$");
-        Data = Data.replaceAll("/0000143",";");
-        Data = Data.replaceAll("/0000144","№");
-        Data = Data.replaceAll("/0000145","#");
-        Data = Data.replaceAll("/0000146","@");
-        Data = Data.replaceAll("/0000147","'");
-        Data = Data.replaceAll("/0000148","\\(");
-        Data = Data.replaceAll("/0000149","\\)");
-        Data = Data.replaceAll("/0000150","\\*");
-        Data = Data.replaceAll("/0000151","\\|");
-        Data = Data.replaceAll("/0000152","&");
-        Data = Data.replaceAll("/0000153","=");
-        Data = Data.replaceAll("/0000154","\\+");
-        Data = Data.replaceAll("/0000155","-");
-        Data = Data.replaceAll("/0000156","_");
-        Data = Data.replaceAll("/0000157","\\{");
-        Data = Data.replaceAll("/0000158","}");
-        Data = Data.replaceAll("/0000159","\\[");
-        Data = Data.replaceAll("/0000160","]");
+        Data = Data.replaceAll(Char_z, "z");
+        Data = Data.replaceAll(Char_y, "y");
+        Data = Data.replaceAll(Char_x, "x");
+        Data = Data.replaceAll(Char_w, "w");
+        Data = Data.replaceAll(Char_v, "v");
+        Data = Data.replaceAll(Char_u, "u");
+        Data = Data.replaceAll(Char_t, "t");
+        Data = Data.replaceAll(Char_s, "s");
+        Data = Data.replaceAll(Char_r, "r");
+        Data = Data.replaceAll(Char_q, "q");
+        Data = Data.replaceAll(Char_p, "p");
+        Data = Data.replaceAll(Char_o, "o");
+        Data = Data.replaceAll(Char_n, "n");
+        Data = Data.replaceAll(Char_m, "m");
+        Data = Data.replaceAll(Char_l, "l");
+        Data = Data.replaceAll(Char_k, "k");
+        Data = Data.replaceAll(Char_j, "j");
+        Data = Data.replaceAll(Char_i, "i");
+        Data = Data.replaceAll(Char_h, "h");
+        Data = Data.replaceAll(Char_g, "g");
+        Data = Data.replaceAll(Char_f, "f");
+        Data = Data.replaceAll(Char_e, "e");
+        Data = Data.replaceAll(Char_d, "d");
+        Data = Data.replaceAll(Char_c, "c");
+        Data = Data.replaceAll(Char_b, "b");
+        Data = Data.replaceAll(Char_a, "a");
 
-        Data = Data.replaceAll("/%%%"," ");
+        Data = Data.replaceAll(Char_Z, "Z");
+        Data = Data.replaceAll(Char_Y, "Y");
+        Data = Data.replaceAll(Char_X, "X");
+        Data = Data.replaceAll(Char_W, "W");
+        Data = Data.replaceAll(Char_V, "V");
+        Data = Data.replaceAll(Char_U, "U");
+        Data = Data.replaceAll(Char_T, "T");
+        Data = Data.replaceAll(Char_S, "S");
+        Data = Data.replaceAll(Char_R, "R");
+        Data = Data.replaceAll(Char_Q, "Q");
+        Data = Data.replaceAll(Char_P, "P");
+        Data = Data.replaceAll(Char_O, "O");
+        Data = Data.replaceAll(Char_N, "N");
+        Data = Data.replaceAll(Char_M, "M");
+        Data = Data.replaceAll(Char_L, "L");
+        Data = Data.replaceAll(Char_K, "K");
+        Data = Data.replaceAll(Char_J, "J");
+        Data = Data.replaceAll(Char_I, "I");
+        Data = Data.replaceAll(Char_H, "H");
+        Data = Data.replaceAll(Char_G, "G");
+        Data = Data.replaceAll(Char_F, "F");
+        Data = Data.replaceAll(Char_E, "E");
+        Data = Data.replaceAll(Char_D, "D");
+        Data = Data.replaceAll(Char_C, "C");
+        Data = Data.replaceAll(Char_B, "B");
+        Data = Data.replaceAll(Char_A, "A");
+
+        Data = Data.replaceAll(Char_SPACE, " ");
 
         return Data;
     }
