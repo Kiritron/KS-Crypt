@@ -100,6 +100,34 @@ public class KSCrypt {
     static String Char_PLUS = "/0000063";
     static String Char_SOLIDUS = "/0000064";
 
+    // Метод для проведения тестирования //
+
+    /**
+     * Метод для проведения тестирования шифрования и дешифрования строки алгоритмом КС Крипт. Данный метод полезен в случаях, когда вы что-то изменили в коде, например, таблицу кодирования, и хотите проверить, всё ли работает.
+     * @param Data Данные, которые будут участвовать в тестировании.
+     * @param KeyForEncrypt Ключ, который будет использован для шифрования данных.
+     * @param KeyForDecrypt Ключ, который будет использовать для дешифрования данных.
+     */
+    public static void crypt_test(String Data, String KeyForEncrypt, String KeyForDecrypt) {
+        try {
+            System.out.println("Данные до шифровки: " + Data);
+            System.out.println("Ключ, который используется для шифрования: " + KeyForEncrypt);
+            System.out.println("Ключ, который используется для дешифрования: " + KeyForDecrypt);
+            System.out.println("===============");
+            System.out.println("~ШиФрУеМ~");
+            System.out.println("===============");
+            Data = encrypt(Data, KeyForEncrypt);
+            System.out.println("Зашифрованные данные: " + Data);
+            System.out.println("===============");
+            System.out.println("~ДеШиФрУеМ~");
+            System.out.println("===============");
+            Data = decrypt(Data, KeyForDecrypt);
+            System.out.println("Дешифрованные данные: " + Data);
+        } catch (NoSuchAlgorithmException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     // Сам код //
 
     /**
@@ -124,16 +152,16 @@ public class KSCrypt {
         SecretCode = GetSecretCodeFromHashKey(HashKey);
 
         boolean[] Index = new boolean[10];
-        if (SecretCode.contains("0")) {Index[0] = true;} else {Index[0] = false;}
-        if (SecretCode.contains("1")) {Index[1] = true;} else {Index[1] = false;}
-        if (SecretCode.contains("2")) {Index[2] = true;} else {Index[2] = false;}
-        if (SecretCode.contains("3")) {Index[3] = true;} else {Index[3] = false;}
-        if (SecretCode.contains("4")) {Index[4] = true;} else {Index[4] = false;}
-        if (SecretCode.contains("5")) {Index[5] = true;} else {Index[5] = false;}
-        if (SecretCode.contains("6")) {Index[6] = true;} else {Index[6] = false;}
-        if (SecretCode.contains("7")) {Index[7] = true;} else {Index[7] = false;}
-        if (SecretCode.contains("8")) {Index[8] = true;} else {Index[8] = false;}
-        if (SecretCode.contains("9")) {Index[9] = true;} else {Index[9] = false;}
+        Index[0] = SecretCode.contains("0");
+        Index[1] = SecretCode.contains("1");
+        Index[2] = SecretCode.contains("2");
+        Index[3] = SecretCode.contains("3");
+        Index[4] = SecretCode.contains("4");
+        Index[5] = SecretCode.contains("5");
+        Index[6] = SecretCode.contains("6");
+        Index[7] = SecretCode.contains("7");
+        Index[8] = SecretCode.contains("8");
+        Index[9] = SecretCode.contains("9");
 
         DataToCrypt = genEncryptedString(DataToCrypt, Index);
         DataToCrypt = EncodeBase64(DataToCrypt);
@@ -157,16 +185,16 @@ public class KSCrypt {
         SecretCode = GetSecretCodeFromHashKey(HashKey);
 
         boolean[] Index = new boolean[10];
-        if (SecretCode.contains("0")) {Index[0] = true;} else {Index[0] = false;}
-        if (SecretCode.contains("1")) {Index[1] = true;} else {Index[1] = false;}
-        if (SecretCode.contains("2")) {Index[2] = true;} else {Index[2] = false;}
-        if (SecretCode.contains("3")) {Index[3] = true;} else {Index[3] = false;}
-        if (SecretCode.contains("4")) {Index[4] = true;} else {Index[4] = false;}
-        if (SecretCode.contains("5")) {Index[5] = true;} else {Index[5] = false;}
-        if (SecretCode.contains("6")) {Index[6] = true;} else {Index[6] = false;}
-        if (SecretCode.contains("7")) {Index[7] = true;} else {Index[7] = false;}
-        if (SecretCode.contains("8")) {Index[8] = true;} else {Index[8] = false;}
-        if (SecretCode.contains("9")) {Index[9] = true;} else {Index[9] = false;}
+        Index[0] = SecretCode.contains("0");
+        Index[1] = SecretCode.contains("1");
+        Index[2] = SecretCode.contains("2");
+        Index[3] = SecretCode.contains("3");
+        Index[4] = SecretCode.contains("4");
+        Index[5] = SecretCode.contains("5");
+        Index[6] = SecretCode.contains("6");
+        Index[7] = SecretCode.contains("7");
+        Index[8] = SecretCode.contains("8");
+        Index[9] = SecretCode.contains("9");
 
         DataToDecrypt = genDecryptedString(DataToDecrypt, Index);
         DataToDecrypt = decodeSymbols(DataToDecrypt);
@@ -181,45 +209,42 @@ public class KSCrypt {
     }
 
     private static String GenHashMD5(String Message) throws NoSuchAlgorithmException {
-        String TranslateKey = Message;
         MessageDigest m = MessageDigest.getInstance("MD5");
         m.reset();
-        m.update(TranslateKey.getBytes());
+        m.update(Message.getBytes());
         byte[] digest = m.digest();
         BigInteger bigInt = new BigInteger(1,digest);
-        String hashtext = bigInt.toString(16);
+        StringBuilder hashtext = new StringBuilder(bigInt.toString(16));
         while(hashtext.length() < 32 ){
-            hashtext = "0"+hashtext;
+            hashtext.insert(0, "0");
         }
-        return hashtext;
+        return hashtext.toString();
     }
 
     private static String GenHashSHA1(String Message) throws NoSuchAlgorithmException {
-        String TranslateKey = Message;
         MessageDigest m = MessageDigest.getInstance("SHA1");
         m.reset();
-        m.update(TranslateKey.getBytes());
+        m.update(Message.getBytes());
         byte[] digest = m.digest();
         BigInteger bigInt = new BigInteger(1,digest);
-        String hashtext = bigInt.toString(16);
+        StringBuilder hashtext = new StringBuilder(bigInt.toString(16));
         while(hashtext.length() < 32 ){
-            hashtext = "0"+hashtext;
+            hashtext.insert(0, "0");
         }
-        return hashtext;
+        return hashtext.toString();
     }
 
     private static String GenHashSHA256(String Message) throws NoSuchAlgorithmException {
-        String TranslateKey = Message;
         MessageDigest m = MessageDigest.getInstance("SHA-256");
         m.reset();
-        m.update(TranslateKey.getBytes());
+        m.update(Message.getBytes());
         byte[] digest = m.digest();
         BigInteger bigInt = new BigInteger(1,digest);
-        String hashtext = bigInt.toString(16);
+        StringBuilder hashtext = new StringBuilder(bigInt.toString(16));
         while(hashtext.length() < 32 ){
-            hashtext = "0"+hashtext;
+            hashtext.insert(0, "0");
         }
-        return hashtext;
+        return hashtext.toString();
     }
 
     private static String EncodeBase64(String Message) {
@@ -231,13 +256,11 @@ public class KSCrypt {
     }
     
     private static String getHashKey(String Key) throws NoSuchAlgorithmException {
-        String hashtext = GenHash(Key);
-        return hashtext;
+        return GenHash(Key);
     }
 
     private static String GenHash(String Key) throws NoSuchAlgorithmException {
-        String out = GenHashMD5(GenHashSHA256(GenHashSHA1(GenHashMD5(GenHashSHA256(Key)))));
-        return out;
+        return GenHashMD5(GenHashSHA256(GenHashSHA1(GenHashMD5(GenHashSHA256(Key)))));
     }
 
     private static String DeleteLettersFromHashKey(String HashKey) {
